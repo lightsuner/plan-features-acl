@@ -1,0 +1,94 @@
+<?php
+
+namespace spec\PlanFeaturesAcl;
+
+use PhpSpec\ObjectBehavior;
+use Prophecy\Argument;
+
+use PlanFeaturesAcl\Plan\PlanInterface;
+use \PlanFeaturesAcl\Validator\FeatureValidatorInterface;
+use \PlanFeaturesAcl\Feature\AttachedInterface;
+use \PlanFeaturesAcl\Feature\FeatureInterface;
+
+class ProviderSpec extends ObjectBehavior
+{
+
+    function let(
+        FeatureValidatorInterface $validator,
+        PlanInterface $plan,
+        AttachedInterface $attachedFeature,
+        FeatureInterface $feature
+    ) {
+
+        $this->beConstructedWith($validator);
+
+        $feature->getSlug()->willReturn('first_feature');
+
+        $attachedFeature->getValue()->willReturn(null);
+        $attachedFeature->getFeature()->willReturn($feature);
+
+        $af = $attachedFeature->getWrappedObject();
+
+        $validator->validate($af->getFeature(), $af->getValue(), null)
+            ->willReturn(true);
+
+        $plan->getAttachedFeatures()->willReturn(array($attachedFeature));
+    }
+
+    function it_is_initializable()
+    {
+        $this->shouldHaveType('PlanFeaturesAcl\ProviderInterface');
+    }
+
+    function it_should_allow_set_plan(PlanInterface $plan)
+    {
+
+        $plan->getAttachedFeatures()->shouldBeCalled();
+
+        $this->setPlan($plan);
+    }
+
+    function it_should_be_enabled()
+    {
+        $this->enable();
+        $this->shouldBeEnable();
+    }
+
+    function it_should_be_disable_by_default()
+    {
+        $this->isEnable()->shouldReturn(false);
+    }
+
+    function it_should_always_allow_access_if_disabled()
+    {
+        $this->isGranted('something')->shouldReturn(true);
+    }
+
+    function it_should_thrown_en_exception_if_plan_not_provided()
+    {
+        $this->enable();
+        $this->shouldThrow('\DomainException')
+            ->duringIsGranted('something');
+    }
+
+
+    function it_should_validate_access(
+        PlanInterface $plan,
+        AttachedInterface $attachedFeature,
+        FeatureValidatorInterface $validator
+    ) {
+
+        $this->enable();
+        $this->setPlan($plan);
+
+        $af = $attachedFeature->getWrappedObject();
+
+        $validator
+            ->validate($af->getFeature(), $af->getValue(), null)
+            ->shouldBeCalled();
+
+        $this->isGranted('first_feature')->shouldReturn(true);
+    }
+
+
+}
