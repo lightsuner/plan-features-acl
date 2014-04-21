@@ -11,6 +11,7 @@ class BoolSpec extends ObjectBehavior
     function it_is_initializable()
     {
         $this->shouldHaveType('PlanFeaturesAcl\Validator\Constraint\Bool');
+        $this->shouldHaveType('PlanFeaturesAcl\Validator\FeatureValidatorInterface');
     }
 
     function it_should_validate_every_value(FeatureInterface $feature)

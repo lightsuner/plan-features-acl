@@ -3,26 +3,28 @@
 namespace PlanFeaturesAcl\Validator;
 
 use PlanFeaturesAcl\Feature\FeatureInterface;
+use PlanFeaturesAcl\Validator\ConstraintFactoryInterface;
 
 class FeatureValidator implements FeatureValidatorInterface
 {
+    /**
+     * @var \PlanFeaturesAcl\Validator\ConstraintFactoryInterface
+     */
+    protected $constraintFactory;
+
+    public function __construct(ConstraintFactoryInterface $constraintFactory)
+    {
+        $this->constraintFactory = $constraintFactory;
+    }
 
     /**
      * {@inheritDoc}
      */
     public function validate(FeatureInterface $feature, $featureValue, $validatedValue)
     {
-        switch ($feature->getType()) {
-            case 'bool':
-                return true;
-                break;
-            case 'numeric':
-                if (!is_numeric($validatedValue) || !is_numeric($featureValue)) {
-                    throw new \InvalidArgumentException();
-                }
 
-                return $featureValue > $validatedValue;
-                break;
-        }
+        $constraint = $this->constraintFactory->getConstraint($feature->getType());
+
+        return $constraint->validate($feature, $featureValue, $validatedValue);
     }
 }

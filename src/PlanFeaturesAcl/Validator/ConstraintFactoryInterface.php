@@ -9,5 +9,11 @@ namespace PlanFeaturesAcl\Validator;
 
 interface ConstraintFactoryInterface
 {
-    public function getValidator($type);
+    /**
+     * Try to get constraint
+     *
+     * @param string $type
+     * @return \PlanFeaturesAcl\Validator\FeatureValidatorInterface
+     */
+    public function getConstraint($type);
 }
