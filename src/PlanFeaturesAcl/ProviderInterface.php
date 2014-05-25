@@ -46,5 +46,5 @@ interface ProviderInterface
      *
      * @param PlanInterface $plan
      */
-    public function setPlan(PlanInterface $plan);
+    public function setPlan(PlanInterface $plan = null);
 }

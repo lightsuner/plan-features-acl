@@ -64,13 +64,6 @@ class ProviderSpec extends ObjectBehavior
         $this->isGranted('something')->shouldReturn(true);
     }
 
-    function it_should_thrown_en_exception_if_plan_not_provided()
-    {
-        $this->enable();
-        $this->shouldThrow('\DomainException')
-            ->duringIsGranted('something');
-    }
-
 
     function it_should_validate_access(
         PlanInterface $plan,
@@ -90,5 +83,12 @@ class ProviderSpec extends ObjectBehavior
         $this->isGranted('first_feature')->shouldReturn(true);
     }
 
+    function it_should_not_valid_anything_with_empty_plan()
+    {
+        $this->enable();
+        $this->setPlan(null);
+
+        $this->isGranted('first_feature')->shouldReturn(false);
+    }
 
 }

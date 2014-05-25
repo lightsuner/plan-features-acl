@@ -46,7 +46,7 @@ class Provider implements ProviderInterface
         }
 
         if (!$this->plan instanceof PlanInterface) {
-            throw new DomainException('The plan must be an instance of PlanInterface.');
+            return false;
         }
 
         if (!array_key_exists($featureName, $this->attachedFeatures)) {
@@ -62,7 +62,7 @@ class Provider implements ProviderInterface
     /**
      * {@inheritDoc}
      */
-    public function setPlan(PlanInterface $plan)
+    public function setPlan(PlanInterface $plan = null)
     {
 
         $this->clear();
@@ -108,9 +108,10 @@ class Provider implements ProviderInterface
      */
     protected function updateFeatures()
     {
-
-        foreach ($this->plan->getAttachedFeatures() as $attachedFeature) {
-            $this->attachedFeatures[$attachedFeature->getFeature()->getSlug()] = $attachedFeature;
+        if ($this->plan instanceof PlanInterface) {
+            foreach ($this->plan->getAttachedFeatures() as $attachedFeature) {
+                $this->attachedFeatures[$attachedFeature->getFeature()->getSlug()] = $attachedFeature;
+            }
         }
 
         return $this;
