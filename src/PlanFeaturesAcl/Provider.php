@@ -49,7 +49,7 @@ class Provider implements ProviderInterface
             return false;
         }
 
-        if (!array_key_exists($featureName, $this->attachedFeatures)) {
+        if (!$this->hasFeature($featureName)) {
             return false;
         }
 
@@ -128,5 +128,25 @@ class Provider implements ProviderInterface
         $this->attachedFeatures = array();
 
         return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasFeature($featureName)
+    {
+        if (!$this->isEnable()) {
+            return true;
+        }
+
+        if (!$this->plan instanceof PlanInterface) {
+            return false;
+        }
+
+        if (!array_key_exists($featureName, $this->attachedFeatures)) {
+            return false;
+        }
+
+        return true;
     }
 }

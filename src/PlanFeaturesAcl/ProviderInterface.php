@@ -47,4 +47,13 @@ interface ProviderInterface
      * @param PlanInterface $plan
      */
     public function setPlan(PlanInterface $plan = null);
+
+    /**
+     * Check for feature in plan
+     *
+     * @param string $feature
+     *
+     * @return bool
+     */
+    public function hasFeature($featureName);
 }

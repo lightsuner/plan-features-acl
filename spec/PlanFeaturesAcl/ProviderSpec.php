@@ -62,6 +62,7 @@ class ProviderSpec extends ObjectBehavior
     function it_should_always_allow_access_if_disabled()
     {
         $this->isGranted('something')->shouldReturn(true);
+        $this->hasFeature('something')->shouldReturn(true);
     }
 
 
@@ -89,6 +90,14 @@ class ProviderSpec extends ObjectBehavior
         $this->setPlan(null);
 
         $this->isGranted('first_feature')->shouldReturn(false);
+    }
+
+    function it_should_check_for_feature_in_plan(PlanInterface $plan)
+    {
+        $this->enable();
+        $this->setPlan($plan);
+        $this->hasFeature('not_existing_feature')->shouldReturn(false);
+        $this->hasFeature('first_feature')->shouldReturn(true);
     }
 
 }

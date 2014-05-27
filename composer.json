@@ -1,6 +1,6 @@
 {
     "name": "lightsuner/plan-features-acl",
-    "description": "Provide some subscription plans & features interfaces and ACL for for them.",
+    "description": "Provide some subscription plans & features interfaces and ACL for them.",
     "minimum-stability": "stable",
     "license": "MIT",
     "autoload": {"psr-0": {"": "src"}},
