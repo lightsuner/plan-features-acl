@@ -100,4 +100,26 @@ class ProviderSpec extends ObjectBehavior
         $this->hasFeature('first_feature')->shouldReturn(true);
     }
 
+    function it_should_throw_exception_when_getting_value_of_nonexistent_feature(PlanInterface $plan)
+    {
+        $this->enable();
+        $this->setPlan($plan);
+        $this->shouldThrow('\RuntimeException')
+        ->duringGetFeatureValue('unknown_type');
+    }
+
+    function it_should_return_real_attachemt_value(PlanInterface $plan, AttachedInterface $attachedFeature)
+    {
+        $af = $attachedFeature->getWrappedObject();
+
+        $this->enable();
+        $this->setPlan($plan);
+        $this->getFeatureValue('first_feature')->shouldReturn($af->getValue());
+    }
+
+    function it_should_always_return_null_if_provider_is_disabled()
+    {
+        $this->getFeatureValue('unknown_type')->shouldReturn(null);
+    }
+
 }

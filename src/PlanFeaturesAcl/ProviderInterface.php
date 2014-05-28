@@ -56,4 +56,13 @@ interface ProviderInterface
      * @return bool
      */
     public function hasFeature($featureName);
+
+    /**
+     * Get value of attached feature
+     *
+     * @param $featureName
+     *
+     * @return mixed
+     */
+    public function getFeatureValue($featureName);
 }

@@ -6,6 +6,7 @@ use PlanFeaturesAcl\Plan\PlanInterface;
 use PlanFeaturesAcl\Feature\AttachedInterface;
 use PlanFeaturesAcl\Validator\FeatureValidatorInterface;
 use DomainException;
+use RuntimeException;
 
 class Provider implements ProviderInterface
 {
@@ -148,5 +149,20 @@ class Provider implements ProviderInterface
         }
 
         return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFeatureValue($featureName)
+    {
+        if (!$this->hasFeature($featureName)) {
+            throw new RuntimeException(sprintf("Feature %s not provided.", $featureName));
+        }
+        if (!$this->isEnable()) {
+            return null;
+        }
+
+        return $this->attachedFeatures[$featureName]->getValue();
     }
 }
