@@ -21,7 +21,7 @@ class ConstraintFactory implements ConstraintFactoryInterface
      */
     public function getConstraint($type)
     {
-        $type = strtoupper($type);
+        $type = strtolower($type);
 
         if (isset($this->constraints[$type])) {
             return $this->constraints[$type];
@@ -40,7 +40,7 @@ class ConstraintFactory implements ConstraintFactoryInterface
             $isLast = ($namespace === $lastNamespace);
 
             try {
-                    return $this->tryToCreateInstance($type, $namespace.$className);
+                return $this->tryToCreateInstance($type, $namespace.$className);
             } catch (RuntimeException $e) {
                 if ($isLast) {
                     throw $e;
